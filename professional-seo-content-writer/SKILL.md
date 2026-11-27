@@ -1,6 +1,6 @@
 ---
 name: professional-seo-content-writer
-description: Writes publication-ready, human-sounding, people-first SEO articles and web content. Use when the user asks for a blog post, article, guide, pillar page, how-to, comparison, review, or any long-form content targeting a keyword, or asks for SEO titles, meta descriptions, slugs, or content optimized for Google and AI search. Covers search-intent analysis, research, E-E-A-T, keyword integration, structure, and final quality control.
+description: Writes publication-ready, human-sounding, people-first SEO articles and web content. Use when the user asks for a blog post, article, guide, pillar page, how-to, comparison, review, or any long-form content targeting a keyword, or asks for SEO titles, meta descriptions, slugs, or content optimized for Google and AI search. Also designs a 768x401 WebP featured thumbnail showing the main keyword. Covers search-intent analysis, research, E-E-A-T, keyword integration, structure, and final quality control.
 ---
 
 # Professional Human-Like SEO Content Writer
@@ -150,7 +150,73 @@ Keep introductions concise and informative. Avoid generic openings such as:
 
 Do not use predictable AI-generated opening patterns. Start with meaningful information.
 
-## 7. Content Structure & Formatting
+## 7. Featured Thumbnail Image (After the Introduction)
+
+Every full blog article gets a custom featured thumbnail. Place it **immediately after the introduction paragraphs and before the first H2**. It works as the blog's featured image, its thumbnail in post lists, and its social share image.
+
+### Thumbnail requirements
+
+- **Format:** WebP.
+- **Size:** exactly **768 × 401 px** (about 1.91:1, the same shape social networks use for link previews).
+- **Headline on the image:** the main keyword, in title case, with correct brand and acronym casing ("How to Clean AirPods", "What Is On-Page SEO").
+- **File name:** the keyword as a slug, for example `how-to-clean-airpods.webp`.
+- **No SVG.** The image must be a raster design: built in HTML/CSS and rendered to pixels in a real browser, or drawn with Pillow. Never hand back an SVG, an emoji collage, or clip art.
+- **Designer quality.** It must look like a graphic designer made it:
+  - Clear hierarchy: small category tag, then a large headline, then an accent line and an optional brand.
+  - One or two typefaces, heavy display weight for the headline.
+  - Strong contrast between text and background, with one accent color for the key word(s).
+  - Depth from gradients, soft glows, shadows, frosted glass, or a real photo, plus subtle film grain.
+  - Generous safe margins; the headline never touches the edges and never runs past 3 lines.
+  - No clutter, no stretched or watermarked photos, no fake logos.
+
+### How to create it
+
+The skill ships two renderers in its `scripts/` folder (next to this `SKILL.md`). Both output exactly 768 × 401 WebP.
+
+1. **Preferred: browser renderer** (Node + Playwright, best typography and effects):
+
+   ```bash
+   node <skill-dir>/scripts/make-thumbnail.cjs --keyword "how to clean airpods" --out "how-to-clean-airpods.webp" --brand "SiteName"
+   ```
+
+   If Playwright is missing, install it once with `npm i playwright` and `npx playwright install chromium`. In ES-module projects keep the `.cjs` extension.
+
+2. **Fallback: Pillow renderer** (Python only, no browser), when Node or Playwright can't be used:
+
+   ```bash
+   python <skill-dir>/scripts/make_thumbnail.py --keyword "how to clean airpods" --out "how-to-clean-airpods.webp" --brand "SiteName"
+   ```
+
+3. **Options** (both scripts):
+
+   | Option | Use |
+   | --- | --- |
+   | `--keyword` | The main keyword (required). Pass it with correct casing if it has brand names. |
+   | `--out` | Output path. Default: `<keyword-slug>.webp` |
+   | `--brand` | Site name or domain shown in the footer. Use it when the user's site is known. |
+   | `--tag` | Small label above the headline. Default is guessed: "How-To Guide", "Top Picks", "Explained", "Comparison", "Review", "Complete Guide". |
+   | `--highlight` | Word(s) shown in the accent color. Default: the last word. Pick the most meaningful word(s). |
+   | `--palette` | `midnight`, `sunset`, `ocean`, `forest`, `ember`, `royal` (plus `mint`, `coral` for light designs in the browser renderer). Match the topic's mood: tech or SaaS → midnight/royal; food or lifestyle → sunset/coral; travel, health, finance → ocean/forest/mint; urgent or bold topics → ember. |
+   | `--style` | Browser renderer only. `bold` (default: gradient, glass cards, glow), `minimal` (editorial serif on paper), `split` (text left, photo right), `photo` (full-bleed photo with overlay). `split` and `photo` need `--photo`. |
+   | `--photo` | Browser renderer only. A photo the user supplied or has the rights to use. |
+
+4. **Check the result.** Open or view the image and confirm: 768 × 401, keyword spelled and cased correctly, no clipped or overlapping text, good contrast. If it looks weak, re-render with a different palette, style, or highlight.
+
+5. **Insert it after the introduction** with descriptive alt text that includes the keyword naturally:
+
+   ```markdown
+   ![How to clean AirPods: step-by-step cleaning guide](how-to-clean-airpods.webp)
+   ```
+
+   If the user gave an image folder or upload path, use it in the `src`.
+
+### Image rights and honesty
+
+- Use only photos the user supplied, owns, or is licensed to use. Never pull random images from search results.
+- Never place third-party logos or trademarks in a way that implies endorsement.
+- If code execution isn't available, don't claim an image was made. Insert the `![alt](slug.webp)` line, then give the user the exact command to generate it.
+
+## 8. Content Structure & Formatting
 
 Organize content using a logical heading hierarchy:
 
@@ -185,7 +251,7 @@ Use numbered lists for sequential instructions, processes, ranked recommendation
 
 Use comparison tables when they genuinely make information easier to understand. Do not create tables simply for visual decoration.
 
-## 8. Human Writing Quality
+## 9. Human Writing Quality
 
 Write naturally, with the judgment and understanding of a professional human writer.
 
@@ -211,7 +277,7 @@ Use contractions naturally when appropriate. Allow the writing a natural rhythm:
 
 Never intentionally introduce grammatical mistakes or awkward wording to imitate humans.
 
-## 9. Information Gain & Originality
+## 10. Information Gain & Originality
 
 Every article must provide meaningful value beyond what readers can already find everywhere. Look for opportunities to include:
 
@@ -238,7 +304,7 @@ When appropriate, explain not only **what** something is but also:
 
 Never invent first-hand experience or case studies. If original information is unavailable, improve the content through better explanations, organization, accuracy, and practical usefulness.
 
-## 10. Google SEO Guidelines
+## 11. Google SEO Guidelines
 
 Follow Google's people-first content principles and current Search Central documentation. Prioritize:
 
@@ -268,7 +334,7 @@ Demonstrate Experience, Expertise, Authoritativeness, and Trustworthiness where 
 
 Do not claim that any particular writing technique guarantees rankings. Do not write for keyword density or chase arbitrary SEO scores.
 
-## 11. Keyword Optimization
+## 12. Keyword Optimization
 
 Integrate the primary keyword naturally into relevant locations:
 
@@ -284,7 +350,7 @@ Also incorporate relevant secondary keywords, long-tail keywords, semantic varia
 
 Avoid keyword stuffing. Never force an exact-match keyword into a sentence where it sounds unnatural. Prioritize topical relevance and comprehensive subject coverage over keyword frequency.
 
-## 12. Reader Engagement
+## 13. Reader Engagement
 
 Keep readers interested by making information easy to consume and useful. Use:
 
@@ -299,7 +365,7 @@ Keep readers interested by making information easy to consume and useful. Use:
 
 Anticipate the reader's next question and answer it when appropriate. Avoid unnecessary storytelling; use stories only when they genuinely improve understanding or demonstrate a point. Every section should give readers a reason to continue.
 
-## 13. AI Search & Extractable Content
+## 14. AI Search & Extractable Content
 
 Structure content so search engines and AI-powered answer systems can understand and accurately interpret it.
 
@@ -315,7 +381,7 @@ Structure content so search engines and AI-powered answer systems can understand
 
 Do not write unnatural content specifically to manipulate AI citations. Focus on clarity, accuracy, and usefulness.
 
-## 14. Internal & External Linking
+## 15. Internal & External Linking
 
 When relevant website URLs or source links are provided:
 
@@ -327,7 +393,7 @@ When relevant website URLs or source links are provided:
 - Prioritize authoritative external references for important factual claims.
 - Never invent URLs or pretend an internal page exists.
 
-## 15. Conclusion
+## 16. Conclusion
 
 Conclude only when a conclusion adds genuine value. A good conclusion should:
 
@@ -338,7 +404,7 @@ Conclude only when a conclusion adds genuine value. A good conclusion should:
 
 Do not add a generic conclusion to every short article.
 
-## 16. SEO Metadata
+## 17. SEO Metadata
 
 When requested, provide the following.
 
@@ -363,9 +429,9 @@ When requested, provide the following.
 - Easy to understand.
 - Includes the main topic when appropriate.
 
-Also suggest relevant image alt text, internal link opportunities, and structured data when useful.
+Also suggest relevant image alt text, internal link opportunities, and structured data when useful. Recommend the featured thumbnail as the `og:image` / Twitter card image and as the `image` property in Article structured data.
 
-## 17. Word Count & Content Depth
+## 18. Word Count & Content Depth
 
 Never target a specific word count simply because competitors have longer articles. Determine the appropriate depth based on:
 
@@ -378,7 +444,7 @@ Never target a specific word count simply because competitors have longer articl
 
 Write enough to answer the query completely. Avoid padding, repetitive explanations, and unnecessary sections. A focused 800-word article that completely solves a problem is better than a repetitive 3,000-word article.
 
-## 18. Final Quality Control
+## 19. Final Quality Control
 
 Before delivering any article, evaluate it against these requirements.
 
@@ -412,6 +478,13 @@ Before delivering any article, evaluate it against these requirements.
 - Are internal and external links relevant?
 - Is the metadata optimized where requested?
 
+**Featured thumbnail**
+
+- Is there a 768 × 401 WebP thumbnail right after the introduction?
+- Does it show the main keyword, spelled and cased correctly?
+- Is it named after the keyword slug, with descriptive alt text?
+- Does it look professionally designed, with no clipped text?
+
 **Reader experience**
 
 - Can readers find answers quickly?
@@ -422,9 +495,10 @@ Before delivering any article, evaluate it against these requirements.
 
 If any important requirement fails, revise the content before delivering it.
 
-## 19. Output Rules
+## 20. Output Rules
 
 - Deliver complete, publication-ready content.
+- Deliver the featured thumbnail WebP file with every full blog article, and state where it was saved.
 - Never provide an outline when the user requests a complete article.
 - Never replace explanations with superficial bullet points.
 - Do not explain your writing process unless requested.
